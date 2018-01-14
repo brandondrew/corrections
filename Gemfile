@@ -1,3 +1,3 @@
 source "https://rubygems.org"
 
-gem 'tty'
+gem 'tty', :git => 'https://github.com/piotrmurach/tty'
