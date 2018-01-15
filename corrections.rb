@@ -9,7 +9,6 @@ require "pry"
 # I'm also going to use minitest for simplicity (& to try something new, as I normally use Rspec).
 # I'm *also* going to embed test code & comments in my initial sketches, and reorganize later.
 
-#require "minitest/autorun"
 
 # steps:
 # 1 get the list based on user input
@@ -22,15 +21,15 @@ require "pry"
 # 8 check for a non-diacritic version in the target language
 # 9 check for duplicates of non-diacritic versions in target language (atém and atêm both have atem)
 
-# require 'open3'
 
+# catch Encoding::UndefinedConversionError
 
 class App
   def initialize
     @shell = TTY::Prompt.new
     @default_prompt = '>: '
     @in_color = Pastel.new
-    @possible_encodings = ['ASCII-8BIT', 'UTF-8', 'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-15']
+    @possible_encodings = ['UTF-8', 'ASCII-8BIT', 'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-15']
     @encoding_hint = ''
     @command = TTY::Command.new(printer: :null)
     @last_ten_words = [] # @last_ten_words = (@last_ten_words << new_word).take(10)
@@ -80,37 +79,58 @@ class App
   def collides(word)
     collision_list.include? word
   end
+
+  def valid_correction(word_without_diacritics, word)
+    # skip words in the collision list
+    return false if collides(word_without_diacritics)
+    # skip words without diacritics
+    return false if word == word_without_diacritics
+    # skip if non-diacritical version is another word
+    return false if word_list_has(word_without_diacritics)
+    # skip English words
+    return false if english_has(word_without_diacritics)
+    # skip if it's the same as the last word
+    if @last_word # TODO: switch to shorthand syntax
+      return false if @last_word[:word_without_diacritics] == word_without_diacritics
+    end
+    return true
+  end
   
   def run
     word_list.each_line do |word|
       # word = word.chomp
       original = word.chomp
-      word = word.chomp.force_encoding(inferred_encoding).encode("utf-8") # TODO: benchmark memoized inferred_encoding versus local variable
+      begin
+        word = word.chomp.force_encoding(inferred_encoding).encode("utf-8") # TODO: benchmark memoized inferred_encoding versus local variable
+      rescue Encoding::UndefinedConversionError
+        puts "That encoding blew up in your face.  Please try a different one."
+        break
+      end
       word_without_diacritics = ActiveSupport::Inflector.transliterate(word)
       
       if original != word
         @fixed_words << word
       end
       
+      # binding.pry unless pry == true
       # binding.pry if word_without_diacritics == 'atem'
-      unless collides(word_without_diacritics)
-        unless word == word_without_diacritics # skip words without diacritics
-          unless word_list_has(word_without_diacritics)  # skip if non-diacritical version is another word
-            unless english_has(word_without_diacritics)  # skip English words
-              # if neither English nor (e.g.) Portuguese has the word in the form WITHOUT diacritics, we add an auto-correct entry
-              puts "#{word_without_diacritics},#{word}"
-              # output is one word behind so we can prevent duplicates
-              # puts "#{@last_word[:word_without_diacritics]},#{@last_word[:word]}" if @last_word
-              # @last_word = {word_without_diacritics: word_without_diacritics, word: word } # TODO<<< MOVE THIS????????
-            else
-              #puts "ENGLISH HAS: #{word_without_diacritics},#{word}"
-            end
-          end
+      # unless collides(word_without_diacritics)
+      # if @last_word
+      #   if valid_correction(@last_word[:word_without_diacritics], @last_word[:word])
+      #     puts "#{@last_word[:word_without_diacritics]},#{@last_word[:word]}" if @last_word
+      #     @last_word = {word_without_diacritics: word_without_diacritics, word: word }
+      #   end
+      # else
+      # puts word_without_diacritics
+        if valid_correction(word_without_diacritics, word)
+          puts "#{word_without_diacritics},#{word}"
+          @last_word = {word_without_diacritics: word_without_diacritics, word: word }
         end
-      end
+        # puts "#{word_without_diacritics},#{word}"
+      # end
     end
     word_list.close
-    puts @fixed_words.inspect
+    # puts @fixed_words.inspect
   end
 
   def file_location
