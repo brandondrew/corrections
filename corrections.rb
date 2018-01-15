@@ -124,6 +124,7 @@ end
 
   def run
     generate_correction_list if collision_list
+    display_wrap_up_message
   end
 
   def display_time_notice_once
@@ -133,7 +134,7 @@ end
   end
 
   def display_wrap_up_message
-    puts @info_style.call "You can now import #{autocorrect_file} into Typinator."
+    puts @info_style.call "\n\nYou can now import #{File.basename(autocorrect_file)} into Typinator.\n"
   end
 
   def file_location
