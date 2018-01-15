@@ -1,5 +1,4 @@
 require 'tty'
-require 'tty-table'
 require 'encoding_sampler'
 require 'active_support/inflector'
 
