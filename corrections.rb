@@ -18,7 +18,7 @@ class App
     @system = TTY::Command.new(printer: :null)
     @key_collisions = []
     @last_collision_candidate = ''
-    @spinner = TTY::Spinner.new(":spinner Generating your autocorrection set... :spinner", format: :arrow_pulse)
+    @spinner = TTY::Spinner.new(':spinner Generating your autocorrection set... :spinner', format: :arrow_pulse)
 end
 
   def define_styles
@@ -112,7 +112,7 @@ end
     if valid_correction(word_without_diacritics, word)
       display_time_notice_once unless @time_notice_displayed
       autocorrect_file.write "#{word_without_diacritics},#{word},match,whole\n"
-      @last_word = {word_without_diacritics: word_without_diacritics, word: word }
+      @last_word = { word_without_diacritics: word_without_diacritics, word: word }
     end
   end
 
@@ -169,7 +169,7 @@ end
         if result.out.match?(/(binary|data)/)
           raise BinaryFile, @danger_style.call("Binary File: we can't parse binary files.")
         elsif result.out.match?(/text/)
-          @encoding_hint = result.out.gsub(' text','').chomp
+          @encoding_hint = result.out.gsub(' text', '').chomp
           @most_likely_encodings = @possible_encodings.select do |encoding|
             encoding =~ /#{@encoding_hint}/
           end
