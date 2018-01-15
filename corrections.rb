@@ -35,7 +35,7 @@ class App
       sorted_encodings.each do |encoding|
         choices["#{encoding}: #{sampler.sample(encoding).inspect}"] = encoding
       end
-      choice = @shell.select((@action_style.call 'Choose the first text sample that looks correct.'), choices, echo: false)
+      @shell.select((@action_style.call 'Choose the first text sample that looks correct.'), choices, echo: false)
     end
   end
 
@@ -99,15 +99,19 @@ class App
   def generate_correction_list
     word_list = get_word_list
     word_list.each_line do |word|
-      word = enforce_encoding(word)
-      word_without_diacritics = ActiveSupport::Inflector.transliterate(word)
-
-      if valid_correction(word_without_diacritics, word)
-        autocorrect_file.write "#{word_without_diacritics},#{word},match,whole\n"
-        @last_word = {word_without_diacritics: word_without_diacritics, word: word }
-      end
+      generate_correction_entry(word)
     end
     word_list.close
+  end
+
+  def generate_correction_entry(word)
+    word = enforce_encoding(word)
+    word_without_diacritics = ActiveSupport::Inflector.transliterate(word)
+    if valid_correction(word_without_diacritics, word)
+      display_time_notice_once unless @time_notice_displayed
+      autocorrect_file.write "#{word_without_diacritics},#{word},match,whole\n"
+      @last_word = {word_without_diacritics: word_without_diacritics, word: word }
+    end
   end
 
   def enforce_encoding(word)
@@ -121,13 +125,22 @@ class App
     generate_correction_list if collision_list
   end
 
+  def display_time_notice_once
+    puts @info_style.call 'This may take a minute for large word lists... ☕'
+    @time_notice_displayed = true
+  end
+
+  def display_wrap_up_message
+    puts @info_style.call "You can now import #{autocorrect_file} into Typinator."
+  end
+
   def file_location
     @file_location ||= begin
       puts @info_style.call 'You will need a word list or spelling dictionary as a source file.'
       puts @info_style.call 'The file should contain one word per line, sorted alphabetically.'
       puts @info_style.call 'This is a common format for word processor spelling dictionaries.'
       puts @action_style.call 'Please enter file path to your word list:'
-      @shell.ask(@default_prompt, default: './sample.dic')
+      @shell.ask(@default_prompt, default: './samples/sample.dic')
     end
   end
 
