@@ -17,7 +17,8 @@ class App
     @system = TTY::Command.new(printer: :null)
     @key_collisions = []
     @last_collision_candidate = ''
-  end
+    @spinner = TTY::Spinner.new(":spinner Generating your autocorrection set... :spinner", format: :arrow_pulse)
+end
 
   def define_styles
     @in_color = Pastel.new
@@ -127,6 +128,7 @@ class App
 
   def display_time_notice_once
     puts @info_style.call 'This may take a minute for large word lists... ☕'
+    @spinner.auto_spin
     @time_notice_displayed = true
   end
 
