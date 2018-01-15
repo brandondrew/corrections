@@ -127,8 +127,6 @@ class App
       puts @info_style.call 'This is a common format for word processor spelling dictionaries.'
       puts @action_style.call 'Please enter file path to your word list:'
       @shell.ask(@default_prompt, default: './sample.dic')
-    rescue
-      retry # <<<<<<<<<<<<<<
     end
   end
 
@@ -137,20 +135,14 @@ class App
   end
 
   def get_word_list
-    time = 1
-    catch(:list) do
-      puts time.inspect
-      if File.file?(file_location)
-        File.open(file_location, 'r')
-      else
-        raise InvalidPath, 'Invalid path: you need to supply a valid path to a word list.'
-      end
+    if File.file?(file_location)
+      File.open(file_location, 'r')
+    else
+      raise InvalidPath, 'Invalid path: you need to supply a valid path to a word list.'
     end
-  rescue InvalidPath => error
+  rescue InvalidPath
     file_location = nil
-    time = 2
-    # retry get_word_list
-    throw :list
+    get_word_list
   end
 
   def sorted_encodings
