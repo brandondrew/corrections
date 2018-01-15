@@ -25,10 +25,10 @@ The number of cases where there are collisions is comparitively few.  There are 
 Roadmap
 -------
 
--[] If there are other expansion and correction utilities that you would like supported, please let me know, and send me exports of their correction sets in every non-binary format possible.  This will allow me to inspect the format that I would need to generate to add support for that tool.
+- [ ] If there are other expansion and correction utilities that you would like supported, please let me know, and send me exports of their correction sets in every non-binary format possible.  This will allow me to inspect the format that I would need to generate to add support for that tool.
 
--[] I would like to add support for using a union of multiple word lists, since I've found some word lists to lack basic common words.
+- [ ] I would like to add support for using a union of multiple word lists, since I've found some word lists to lack basic common words.
 
--[] I would like to add support for doing a look up online of frequency data for words, such as chá and chã, to determine whether one word can be ignored or not.
+- [ ] I would like to add support for doing a look up online of frequency data for words, such as chá and chã, to determine whether one word can be ignored or not.
 
 
