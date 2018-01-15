@@ -24,8 +24,8 @@ In this case, chá is a very common word, but chã is very rare.  (One native sp
 The number of cases where there are collisions is comparitively few.  There are an abundance of cases where we can automatically correct the word, saving you from finger gymnastics in 99.5% of case.  (Okay, I made that figure up, but it's a good-faith estimate. 😉 )
 
 
-Roadmap
--------
+Roadmap: Features Under Consideration
+-------------------------------------
 
 - [ ] If there are other expansion and correction utilities that you would like supported, please let me know, and send me exports of their correction sets in every non-binary format possible.  This will allow me to inspect the format that I would need to generate to add support for that tool.
 
@@ -33,4 +33,22 @@ Roadmap
 
 - [ ] I would like to add support for doing a look up online of frequency data for words, such as chá and chã, to determine whether one word can be ignored or not.
 
+- [ ] Experiment with performance improvements by loading word lists into memory if they are below a threshold specified by `MAX_WORD_LIST_SIZE`.
 
+- [ ] Add command-line options.
+
+- [ ] Upgrade TTY to 0.7.0.
+
+- [ ] Create an executable that can be installed with `gem install corrections`.
+
+- [ ] Add Aruba specs.
+
+- [ ] Add support for URLs in addition to local file paths.
+
+- [ ] Add a library of known good URLs for downloading spelling dictionaries (I've found good ones surprisingly hard to find).
+
+- [ ] Retry request for file location after being given a bad path (or URL).
+
+- [ ] Consider using https://github.com/brianmario/charlock_holmes to display confidence for possible encodings.
+
+- [ ] Add `readline` support.
