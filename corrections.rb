@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tty'
 require 'encoding_sampler'
 require 'active_support/inflector'
