@@ -19,7 +19,7 @@ class App
     @key_collisions = []
     @last_collision_candidate = ''
     @spinner = TTY::Spinner.new(':spinner Generating your autocorrection set... :spinner', format: :arrow_pulse)
-end
+  end
 
   def define_styles
     @in_color = Pastel.new

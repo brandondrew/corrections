@@ -4,6 +4,8 @@ Corrections
 
 Enter the location of a spelling dictionary for the language of your choice, and generate a correction set for Typinator.
 
+![how to use this software](./docs/usage_demo.gif)
+
 The generated set will allow you to automatically enter words in that language without diacritical marks, and have the word corrected to include diacritical marks.  This is very useful for languages like Portuguese, which have an abundance of diacritical marks, which otherwise are laborious to type.
 
 
