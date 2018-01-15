@@ -2,7 +2,6 @@ require 'tty'
 require 'tty-table'
 require 'encoding_sampler'
 require 'active_support/inflector'
-require 'pry' if ENV['PRY']
 
 class InvalidPath < RuntimeError; end
 class BinaryFile < RuntimeError; end
@@ -100,12 +99,12 @@ class App
   def generate_correction_list
     word_list = get_word_list
     word_list.each_line do |word|
-      begin
-        word = word.chomp.force_encoding(inferred_encoding).encode('utf-8')
-      rescue Encoding::UndefinedConversionError
-        puts @danger_style.call 'That encoding blew up in your face.  Please try a different one.'
-        break
-      end
+      # begin
+      #   word = word.chomp.force_encoding(inferred_encoding).encode('utf-8')
+      # rescue Encoding::UndefinedConversionError
+      #   puts @danger_style.call 'That encoding blew up in your face.  Please try a different one.'
+      #   break
+      word = word.chomp.force_encoding(inferred_encoding).encode('utf-8')
       word_without_diacritics = ActiveSupport::Inflector.transliterate(word)
 
       if valid_correction(word_without_diacritics, word)
