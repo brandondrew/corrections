@@ -31,7 +31,7 @@ end
     @inferred_encoding ||= begin
       sampler = EncodingSampler::Sampler.new(file_location, sorted_encodings)
       # surprise: EncodingSampler changes @sorted_encodings! 😱
-      puts @action_style.call 'Please choose correct encodings of the file.'
+      puts @action_style.call "\nPlease choose correct encodings of the file."
       choices = {}
       sorted_encodings.each do |encoding|
         choices["#{encoding}: #{sampler.sample(encoding).inspect}"] = encoding
@@ -128,7 +128,7 @@ end
   end
 
   def display_time_notice_once
-    puts @info_style.call 'This may take a minute for large word lists... ☕'
+    puts @info_style.call "\nThis may take a minute for large word lists... ☕"
     @spinner.auto_spin
     @time_notice_displayed = true
   end
@@ -139,7 +139,7 @@ end
 
   def file_location
     @file_location ||= begin
-      puts @info_style.call 'You will need a word list or spelling dictionary as a source file.'
+      puts @info_style.call "\nYou will need a word list or spelling dictionary as a source file."
       puts @info_style.call 'The file should contain one word per line, sorted alphabetically.'
       puts @info_style.call 'This is a common format for word processor spelling dictionaries.'
       puts @action_style.call 'Please enter file path to your word list:'
