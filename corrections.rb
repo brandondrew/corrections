@@ -135,9 +135,11 @@ class App
     if File.file?(file_location)
       File.open(file_location, 'r')
     else
-      raise InvalidPath\
-      , @danger_style.call('Invalid path: you need to supply a valid path to a word list.')
+      raise InvalidPath
     end
+  rescue InvalidPath
+    puts @danger_style.call('Invalid path: you need to supply a valid path to a word list.')
+    exit 2
   end
 
   def sorted_encodings
