@@ -2,7 +2,7 @@
 Corrections
 ===========
 
-Enter the location of a spelling dictionary for the language of your choice, and generate a correction set for Typinator.
+Enter the location of a spelling dictionary for the language of your choice, and generate a correction set for [Typinator](http://www.ergonis.com/products/typinator/).
 
 ![how to use this software](./docs/usage_demo.gif)
 
