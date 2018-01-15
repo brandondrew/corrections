@@ -86,7 +86,7 @@ class App
     return false if word_list_has(word_without_diacritics)
     # skip English words
     return false if english_has(word_without_diacritics)
-    return true
+    true
   end
 
   def base_file_path
@@ -94,7 +94,7 @@ class App
   end
 
   def autocorrect_file
-    @autocorrect_file ||= File.open(base_file_path + "_Autocorrect.csv", "w")
+    @autocorrect_file ||= File.open(base_file_path + '_Autocorrect.csv', 'w')
   end
 
   def generate_correction_list
@@ -130,30 +130,24 @@ class App
     end
   end
 
-  def file_location=(value)
-    @file_location = value
-  end
-
   def get_word_list
     if File.file?(file_location)
       File.open(file_location, 'r')
     else
-      raise InvalidPath, 'Invalid path: you need to supply a valid path to a word list.'
+      raise InvalidPath\
+      , @danger_style.call('Invalid path: you need to supply a valid path to a word list.')
     end
-  rescue InvalidPath
-    file_location = nil
-    get_word_list
   end
 
   def sorted_encodings
     @sorted_encodings ||= begin
-      result = @system.run('file', '--brief', '--keep-going', file_location)
+      result = @system.run!('file', '--brief', '--keep-going', file_location)
       if result.failure?
         puts @danger_style.call 'Your system returned an error.  You may lack /usr/bin/file.'
         # things will still work without /usr/bin/file
       else
         if result.out.match?(/(binary|data)/)
-          raise BinaryFile, "Binary File: we can't parse binary files."
+          raise BinaryFile, @danger_style.call("Binary File: we can't parse binary files.")
         elsif result.out.match?(/text/)
           @encoding_hint = result.out.gsub(' text','').chomp
           @most_likely_encodings = @possible_encodings.select do |encoding|
@@ -161,7 +155,8 @@ class App
           end
           @sorted_encodings = (@most_likely_encodings + @possible_encodings).uniq
         else
-          raise UnknownFileEncoding, "Unknown File Encoding: we can't determine what kind of file this is...."
+          raise UnknownFileEncoding\
+          , @danger_style.call("Unknown File Encoding: we can't determine what kind of file this is....")
         end
       end
       @sorted_encodings ||= @possible_encodings
