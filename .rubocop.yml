@@ -1,0 +1,9 @@
+
+# I'd like to know who has only 80 columns on their terminal 😜
+Metrics/LineLength:
+  Max: 120
+
+# length might be a good heuristic for methods... but not classes
+# having a single responsibility is infinitely more important than length
+Metrics/ClassLength:
+  Max: 250
