@@ -52,3 +52,5 @@ Roadmap: Features Under Consideration
 - [ ] Consider using https://github.com/brianmario/charlock_holmes to display confidence for possible encodings.
 
 - [ ] Add `readline` support.
+
+- [ ] Add a (deterministic) progressbar with realistic estimates.  (Not even Apple or Microsoft or IBM can get this right! 😜)
